@@ -1,10 +1,11 @@
-= therapist
+= therapy
 
-A command line tool for dealing with your (GitHub) issues.
+A command line tool for dealing with your (GitHub) issues. This is a fork of
+http://github.com/technicalpickles/therapist.
 
 Install it:
 
-    $ sudo gem install technicalpickles-therapist
+    $ sudo gem install therapy
 
 
 It works by guessing groking a git repository to figure out the user and repository on GitHub, and then hitting their API to get the issues. The issues get stashed in .git/issues to avoid constantly hitting the API, and for offline convenience.
@@ -12,7 +13,7 @@ It works by guessing groking a git repository to figure out the user and reposit
 Here's how you might use it:
 
     $ cd jeweler
-    $ therapist list
+    $ therapy list
     #1     open: Windows Compatibility
     #2     open: remove jeweler tasks' dependence on rake i.e. to allow thor to use the tasks
     #6     open: Project creation failing (adding origin remote)
@@ -30,7 +31,7 @@ Here's how you might use it:
 Knowing an issue you want to look in, you can show more details:
 
 
-    $ therapist show 22
+    $ therapy show 22
     #22 open: no such file to load -- shoulda (LoadError)
 
     user   : thopre
@@ -44,9 +45,10 @@ Knowing an issue you want to look in, you can show more details:
     
 == Limitations
 
- * Issues only ever get fetchd once. They should get stale after a while, or you should be able to force a download
+ * Issues only ever get fetched once. They should get stale after a while, or you should be able to force a download
  * Was built as a 1 hour spike before Railscamp NE, so no tests yet
 
 == Copyright
 
-Copyright (c) 2009 Josh Nichols. See LICENSE for details.
+Contributions from Jeff Rafter public domain.
+Copyright (c) 2009 Josh Nichols. See LICENSE for details. 

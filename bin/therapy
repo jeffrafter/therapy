@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
-require 'therapist'
+require 'rubygems'
+require 'therapy'
 require 'optimus_prime'
 
-class Therapist::Commands
+class Therapy::Commands
   include OptimusPrime
 
   command :list do
@@ -13,8 +14,8 @@ class Therapist::Commands
     # USAGE:
     #
     #     $ cd path/to/git/repo
-    #     $ therapist list
-    Therapist.new.list
+    #     $ therapy list
+    Therapy.new.list
   end
 
   command :show do |number|
@@ -23,9 +24,9 @@ class Therapist::Commands
     # USAGE:
     #
     #     $ cd path/to/git/repo
-    #     $ therapist show <number>
+    #     $ therapy show <number>
     number.gsub!('#', '')
-    Therapist.new.show(number)
+    Therapy.new.show(number)
   end
 
   command :fetch do
@@ -33,9 +34,9 @@ class Therapist::Commands
     # USAGE:
     #
     #     $ cd path/to/git/repo
-    #     $ therapist list
-    Therapist.new.fetch
+    #     $ therapy list
+    Therapy.new.fetch
   end
 end
 
-Therapist::Commands.new
+Therapy::Commands.new

@@ -4,15 +4,17 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "therapist"
+    gem.name = "therapy"
     gem.summary = %Q{Helps you deal with your (GitHub) issues}
-    gem.description = %Q{Therapist is a command line tool to help you interact with GitHub issues. Also supports offline viewing of said issues.}
-    gem.email = "josh@technicalpickles.com"
-    gem.homepage = "http://github.com/technicalpickles/therapist"
-    gem.authors = ["Josh Nichols"]
+    gem.description = %Q{Therapy is a command line tool to help you interact with GitHub issues. Also supports offline viewing of said issues.}
+    gem.email = "josh@technicalpickles.com; jeff@socialrange.org"
+    gem.homepage = "http://github.com/jeffrafter/therapy"
+    gem.authors = ["Josh Nichols", "Jeff Rafter"]
     gem.add_dependency "nakajima-nakajima"
-    gem.add_dependency "nakajima-optimus-prime"
+    gem.add_dependency "optimus-prime"
     gem.add_dependency "git"
+    gem.files = FileList["[A-Z]*", "{lib,bin}/**/*", "test/**/*"] 
+    gem.test_files = FileList["test/**/*"] 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 
@@ -53,7 +55,7 @@ Rake::RDocTask.new do |rdoc|
   end
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "therapist #{version}"
+  rdoc.title = "therapy #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

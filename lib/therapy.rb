@@ -1,12 +1,13 @@
 require 'git'
 require 'net/http'
 
-class Therapist
-  attr_accessor :username, :repository
+class Therapy
+  attr_accessor :username, :repository, :config
   def initialize()
-    git = Git.open(Dir.pwd)
-
-    origin_url = git.remote('origin').url
+    @git = Git.open(Dir.pwd)
+    @config = Git.global_config
+    
+    origin_url = @git.remote('origin').url
     origin_url =~ /git@github\.com:(.*)\/(.*)\.git/
     @username = $1
     @repository = $2
@@ -49,12 +50,15 @@ class Therapist
   private
 
   def fetch_issues
+    @out.puts "Fetching issues for #{@username}/#{@repository}"
+
     FileUtils.mkdir_p(issues_dir)
 
-    response = Net::HTTP.get(URI.parse(list_issues_url))
+    response = Net::HTTP.post_form(URI.parse(list_issues_url), post_auth)    
+    @out.puts "There was an error fetching the issues (#{response.code}): #{response.body}" and return if response.code != '200'
 
     File.open open_issues_file, "w" do |file|
-      file.write response
+      file.write response.body
     end
 
     open_issues.each do |issue|
@@ -63,11 +67,15 @@ class Therapist
   end
 
   def fetch_issue(number)
+    @out.puts "Fetching issue #{number} for #{@username}/#{@repository}"
+
     FileUtils.mkdir_p(issues_dir)
-    response = Net::HTTP.get(URI.parse(show_issues_url(number)))
+
+    response = Net::HTTP.post_form(URI.parse(show_issues_url(number)), post_auth)
+    @out.puts "There was an error fetching the issues (#{response.code}): #{response.body}" and return if response.code != '200'
 
     File.open issue_file(number), "w" do |file|
-      file.write response
+      file.write response.body
     end
   end
 
@@ -91,4 +99,12 @@ class Therapist
     "#{issues_dir}/#{number}.yml"
   end
 
+  def post_auth
+    options = {}
+    if (@config['github.token'] && @config['github.user'])
+      options['token'] = @config['github.token']
+      options['login'] = @config['github.user']
+    end  
+    options
+  end
 end
