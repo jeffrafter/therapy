@@ -8,6 +8,14 @@ require 'optimus_prime'
 class Therapy::Commands
   include OptimusPrime
 
+  option :issue, :message, :title
+  
+  def fail(message, command)
+    puts message
+    puts "For more information run: therapy help #{command}"
+    exit(0)
+  end
+  
   command :list do
     # Lists issues for the current repository
     #
@@ -25,6 +33,7 @@ class Therapy::Commands
     #
     #     $ cd path/to/git/repo
     #     $ therapy show <number>
+    fail("You must include the issue number", "show") if number.nil? || number.empty?    
     number.gsub!('#', '')
     Therapy.new.show(number)
   end
@@ -37,6 +46,106 @@ class Therapy::Commands
     #     $ therapy list
     Therapy.new.fetch
   end
+
+  command :comment do |number, comment|
+    # Adds a comment to a specific issue for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy comment <number> <comment>
+    fail("You must include the issue number", "comment") if number.nil? || number.empty?    
+    fail("You must include the comment", "comment") if comment.nil? || comment.empty?    
+    number.gsub!('#', '')
+    Therapy.new.comment(number, comment)
+  end  
+  
+  command :labels do 
+    # Shows labels for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy labels 
+    Therapy.new.labels
+  end    
+
+  command :label do |number, label|
+    # Adds a label to a specific issue for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy label <number> <label>
+    fail("You must include the issue number", "label") if number.nil? || number.empty?    
+    fail("You must include the label", "label") if label.nil? || label.empty?    
+    number.gsub!('#', '')
+    Therapy.new.label(number, label)
+  end  
+  
+  command :unlabel do |number, label|
+    # Removes a label from a specific issue for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy unlabel <number> <label>
+    fail("You must include the issue number", "unlabel") if number.nil? || number.empty?    
+    fail("You must include the label", "unlabel") if label.nil? || label.empty?    
+    number.gsub!('#', '')
+    Therapy.new.unlabel(number, label)
+  end  
+  
+  command :close do |number|
+    # Close an issue for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy close <number>
+    fail("You must include the issue number", "close") if number.nil? || number.empty?    
+    number.gsub!('#', '')
+    Therapy.new.close(number)
+  end  
+  
+  command :reopen do |number|
+    # Reopen an issue for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy reopen <number>
+    fail("You must include the issue number", "reopen") if number.nil? || number.empty?    
+    number.gsub!('#', '')
+    Therapy.new.reopen(number)
+  end  
+  
+  command :open do
+    # Open an issue for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy open --title "Superawesome" --message "Something about the awesome"
+    fail("You must include the --message option", "open") if @message.nil? || @message.empty?    
+    fail("You must include the --title option", "open") if @title.nil? || @title.empty?    
+    Therapy.new.open(@title, @message)
+  end  
+  
+  command :edit do 
+    # Edit a specific issue for the current repository
+    #
+    # USAGE:
+    #
+    #     $ cd path/to/git/repo
+    #     $ therapy edit --issue 1 --title "Superawesome" --message "Something about the awesome"
+    fail("You must include the --issue option", "edit") if @issue.nil? || @issue.empty?    
+    fail("You must include the --message option", "edit") if @message.nil? || @message.empty?    
+    fail("You must include the --title option", "edit") if @title.nil? || @title.empty?    
+    @issue.gsub!('#', '')
+    Therapy.new.edit(@issue, @title, @message)
+  end  
+  
 end
 
 Therapy::Commands.new
